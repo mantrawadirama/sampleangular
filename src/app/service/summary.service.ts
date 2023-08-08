@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { NotificationService } from './notification.service';
+import { CalendarModel } from '../viewModel/Calendar.modal';
 
 @Injectable({
   providedIn: 'root',
@@ -7,17 +8,14 @@ import { NotificationService } from './notification.service';
 export class SummaryService {
   private month: string;
 
-  constructor(private vm: any, private noticationService: NotificationService) {
-    this.month = ''; // Initialize month as needed
+  constructor(
+    private vm: CalendarModel,
+    private noticationService: NotificationService
+  ) {
+    this.month = 'August'; // Initialize month as needed
   }
   private modified(): boolean {
     return true;
-  }
-
-  private save(): Promise<void> {
-    return new Promise((resolve, reject) => {
-      resolve(); // Resolve the promise after successful save
-    });
   }
 
   private updateCurrentMonthAndOrganizationSelection(): void {
@@ -26,6 +24,20 @@ export class SummaryService {
 
   private updateUserSelections(): void {
     // Implement the logic to update user selections
+  }
+  private save(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      // Simulate some asynchronous confirmation process
+      setTimeout(() => {
+        const confirmed = true; // Replace with your actual confirmation logic
+
+        if (confirmed) {
+          resolve(); // If confirmed, resolve the promise
+        } else {
+          reject(new Error('Save confirmation failed')); // If not confirmed, reject the promise
+        }
+      }, 1000); // Simulating a 1-second delay
+    });
   }
   onMonthSelectionChange = () => {
     let userSelections = this.vm.getCurrentMonthAndOrganizationSelected();
@@ -38,7 +50,7 @@ export class SummaryService {
         .confirmSave()
 
         .then(() => {
-          save().then(() => {
+          this.save().then(() => {
             const updatedMonth = 'August';
             this.month = updatedMonth;
 
@@ -49,18 +61,4 @@ export class SummaryService {
       this.updateUserSelections();
     }
   };
-}
-function save(): Promise<void> {
-  return new Promise((resolve, reject) => {
-    // Simulate some asynchronous confirmation process
-    setTimeout(() => {
-      const confirmed = true; // Replace with your actual confirmation logic
-
-      if (confirmed) {
-        resolve(); // If confirmed, resolve the promise
-      } else {
-        reject(new Error('Save confirmation failed')); // If not confirmed, reject the promise
-      }
-    }, 1000); // Simulating a 1-second delay
-  });
 }
